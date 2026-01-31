@@ -1,6 +1,6 @@
 #include <cstdio>
 #include "pico/stdlib.h"
-#include "hardware_pwm.h"
+#include "hardware/pwm.h"
 
 #define PIN_STEP 14
 #define PIN_DIRECTION 15

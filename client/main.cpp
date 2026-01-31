@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <termios.h>
 #include <signal.h>
 #include <iostream>
@@ -20,7 +19,7 @@
 
 static termios origTermConf;
 int picoSerial = INVALID_FILE;
-char TOGGLE = 255;
+char DIRECTION_TOGGLE = 255;
 
 void restoreTerminalState()
 {
@@ -37,14 +36,14 @@ void updateSpeed(unsigned char *pSpeed)
   }
 }
 
-void updateStatus(bool running)
+void updateDirection(bool forward)
 {
   std::cout << CURSOR_UP(STATUS_LINE) << CLEAR_RIGHT
-    << (const char *)(running ? "Running" : "Stopped") << CARRIAGE_RETURN
+    << (const char *)(forward ? "Forward" : "Reverse") << CARRIAGE_RETURN
     << CURSOR_DOWN(STATUS_LINE);
   if (picoSerial != INVALID_FILE)
   {
-    write(picoSerial, &TOGGLE, 1);
+    write(picoSerial, &DIRECTION_TOGGLE, 1);
   }
 }
 
@@ -98,15 +97,15 @@ int main()
   }
 
   std::cout
-    << "j: increase speed    k: decrease speed" << std::endl
-    << "u: start/stop        q: quit"
-    << std::endl << std::endl << std::endl << std::endl << std::endl;
+    << "j: increase speed     k: decrease speed" << std::endl
+    << "u: toggle direcion    q: quit" << std::endl
+    << std::endl << std::endl << std::endl << std::endl;
 
   char c;
-  bool isRunning = true;
+  bool isForward = true;
   unsigned char speed = 16;
   updateSpeed(&speed);
-  updateStatus(isRunning);
+  updateDirection(isForward);
   while (std::cin.get(c))
   {
     if (c == 'k' && speed != 254)
@@ -121,8 +120,8 @@ int main()
     }
     else if (c == 'u')
     {
-      isRunning = !isRunning;
-      updateStatus(isRunning);
+      isForward = !isForward;
+      updateDirection(isForward);
     }
     else if (c == 'q')
     {

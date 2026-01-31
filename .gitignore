@@ -1,4 +1,4 @@
 *.o
 *.exe
 client/client
-pico/build
+pico-build/

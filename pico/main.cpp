@@ -18,12 +18,7 @@ int main()
 
   while (true)
   {
-    int rawInput = getchar();
-    if (rawInput == -1)
-    {
-      continue;
-    }
-    char input = (char)rawInput;
+    int input = getchar();
     if (input == TOGGLE_DIRECTION)
     {
       forward = !forward;
@@ -33,7 +28,7 @@ int main()
     {
       pwm_set_chan_level(pwmSlice, PWM_CHAN_A, 0);
     }
-    else
+    else if (input != -1)
     {
       pwm_set_chan_level(pwmSlice, PWM_CHAN_A, 1);
       uint16_t offTicks = (uint16_t)((1.0 - ((double)input) / 255.0) * ~(uint16_t)0);
